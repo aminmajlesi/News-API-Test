@@ -3,18 +3,26 @@ package com.example.newsapp.ui
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.newsapp.R
 import com.example.newsapp.databinding.ActivityNewsBinding
+import com.example.newsapp.db.MessageDatabase
+import com.example.newsapp.repository.NewsRepository
 
 class NewsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewsBinding
+    lateinit var viewModel: NewsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityNewsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val newsRepository = NewsRepository(MessageDatabase(this))
+        val viewModelProviderFactory = NewsViewModelProviderFactory(newsRepository)
+        viewModel = ViewModelProvider(this, viewModelProviderFactory).get(NewsViewModel::class.java)
 
         setupTabLayout()
         setupViewPager()
