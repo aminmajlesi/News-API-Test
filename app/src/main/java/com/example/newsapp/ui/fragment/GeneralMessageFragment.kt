@@ -14,7 +14,10 @@ import com.example.newsapp.ui.NewsActivity
 import com.example.newsapp.ui.NewsViewModel
 import androidx.lifecycle.Observer
 import com.example.newsapp.util.Resource
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_general_message.*
+import kotlinx.android.synthetic.main.item_message_preview.*
+
 /**
  * @author by Amin Majlesi
  */
@@ -39,8 +42,28 @@ class GeneralMessageFragment : Fragment () {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as NewsActivity).viewModel
-        //setupData()
         setupRecyclerView()
+
+        ////////
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("message", it)
+            }
+
+        }
+//
+//        ivSaved.setOnClickListener {
+//            viewModel.saveMessage(message)
+//            Snackbar.make(view, "News saved successfully", Snackbar.LENGTH_SHORT).show()
+//        }
+
+        newsAdapter.setOnItemClickListener{
+            Snackbar.make(view, "News saved successfully : $it", Snackbar.LENGTH_SHORT).show()
+        }
+
+
+        ////////
+
 
         viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
             when(response) {
@@ -64,10 +87,6 @@ class GeneralMessageFragment : Fragment () {
 
 
     }
-
-//    private fun setupData() {
-//        binding.label.text = getString(R.string.second_fragment)
-//    }
 
     private fun hideProgressBar() {
         paginationProgressBar.visibility = View.INVISIBLE

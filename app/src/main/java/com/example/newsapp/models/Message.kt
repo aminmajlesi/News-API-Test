@@ -2,6 +2,7 @@ package com.example.newsapp.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(
     tableName = "message_table"
@@ -14,4 +15,4 @@ data class Message(
     val image: String,
     val title: String,
     val unread: Boolean
-)
+) : Serializable
