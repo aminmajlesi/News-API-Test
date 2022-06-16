@@ -50,6 +50,8 @@ class GeneralMessageFragment : Fragment () {
                 putSerializable("message", it)
             }
 
+            Snackbar.make(view, "News saved successfully : $it", Snackbar.LENGTH_LONG).show()
+
         }
 //
 //        ivSaved.setOnClickListener {
@@ -57,9 +59,9 @@ class GeneralMessageFragment : Fragment () {
 //            Snackbar.make(view, "News saved successfully", Snackbar.LENGTH_SHORT).show()
 //        }
 
-        newsAdapter.setOnItemClickListener{
-            Snackbar.make(view, "News saved successfully : $it", Snackbar.LENGTH_SHORT).show()
-        }
+//        newsAdapter.setOnItemClickListener{
+//            Snackbar.make(view, "News saved successfully : $it", Snackbar.LENGTH_SHORT).show()
+//        }
 
 
         ////////
