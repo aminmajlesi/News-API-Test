@@ -9,7 +9,9 @@ import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentSavedMessageBinding
 import com.example.newsapp.ui.NewsActivity
 import com.example.newsapp.ui.NewsViewModel
-
+/**
+ * @author by Amin Majlesi
+ */
 class SavedMessageFragment : Fragment() {
 
 
@@ -21,7 +23,7 @@ class SavedMessageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSavedMessageBinding.inflate(layoutInflater)
+        binding = FragmentSavedMessageBinding.inflate(layoutInflater,container, false)
         return binding.root
     }
 

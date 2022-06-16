@@ -10,7 +10,9 @@ import com.bumptech.glide.Glide
 import com.example.newsapp.R
 import com.example.newsapp.models.Message
 import kotlinx.android.synthetic.main.item_message_preview.view.*
-
+/**
+ * @author by Amin Majlesi
+ */
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.MessageViewHolder>(){
 
     inner class MessageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)

@@ -3,12 +3,15 @@ package com.example.newsapp.ui
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.example.newsapp.R
 import com.example.newsapp.databinding.ActivityNewsBinding
 import com.example.newsapp.db.MessageDatabase
 import com.example.newsapp.repository.NewsRepository
-
+/**
+ * @author by Amin Majlesi
+ */
 class NewsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewsBinding
@@ -19,6 +22,9 @@ class NewsActivity : AppCompatActivity() {
 
         binding = ActivityNewsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setSupportActionBar(binding.toolbar)
+        getSupportActionBar()?.setDisplayShowTitleEnabled(false)
 
         val newsRepository = NewsRepository(MessageDatabase(this))
         val viewModelProviderFactory = NewsViewModelProviderFactory(newsRepository)

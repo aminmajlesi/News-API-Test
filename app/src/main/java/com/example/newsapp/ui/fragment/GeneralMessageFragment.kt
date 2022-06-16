@@ -15,7 +15,9 @@ import com.example.newsapp.ui.NewsViewModel
 import androidx.lifecycle.Observer
 import com.example.newsapp.util.Resource
 import kotlinx.android.synthetic.main.fragment_general_message.*
-
+/**
+ * @author by Amin Majlesi
+ */
 class GeneralMessageFragment : Fragment () {
 
 
@@ -30,7 +32,7 @@ class GeneralMessageFragment : Fragment () {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGeneralMessageBinding.inflate(layoutInflater)
+        binding = FragmentGeneralMessageBinding.inflate(layoutInflater ,container, false)
         return binding.root
     }
 
