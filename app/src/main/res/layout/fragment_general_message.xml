@@ -9,10 +9,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBreakingNews"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:clipToPadding="false"
         android:paddingBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnRemove"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +27,58 @@
         android:visibility="invisible"
         android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnRemove"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:text="@string/remove"
+        android:visibility="gone"
+        android:textColor="@color/colorMessageOrange"
+        android:background="@drawable/background_remove_button"
+        app:layout_constraintStart_toStartOf="@+id/gl_ver_start"
+        app:layout_constraintEnd_toEndOf="@+id/gl_ver_center"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:visibility="gone"
+        android:text="@string/cancle"
+        android:textColor="@color/white"
+        android:background="@drawable/background_cancle_button"
+        app:layout_constraintEnd_toEndOf="@+id/gl_ver_end"
+        app:layout_constraintStart_toStartOf="@+id/gl_ver_center"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_ver_start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_ver_end"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_ver_center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

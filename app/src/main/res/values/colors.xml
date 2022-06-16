@@ -15,4 +15,6 @@
 
 
     <color name="colorBlueBackground">#F5F5F5</color>
+    <color name="colorMessageUnread">#F0F3F6</color>
+    <color name="colorMessageOrange">#FF8800</color>
 </resources>

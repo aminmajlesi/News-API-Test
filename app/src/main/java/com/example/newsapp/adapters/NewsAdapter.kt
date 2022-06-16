@@ -1,8 +1,11 @@
 package com.example.newsapp.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -13,8 +16,11 @@ import kotlinx.android.synthetic.main.item_message_preview.view.*
 /**
  * @author by Amin Majlesi
  */
-class NewsAdapter : RecyclerView.Adapter<NewsAdapter.MessageViewHolder>(){
+class NewsAdapter(
+    val onSaveClick : (Message) -> Unit,
+) : RecyclerView.Adapter<NewsAdapter.MessageViewHolder>(){
 
+    var isLongTouch : Boolean = false
     inner class MessageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
     private val differCallback = object : DiffUtil.ItemCallback<Message>() {
@@ -43,14 +49,78 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.MessageViewHolder>(){
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val message = differ.currentList[position]
         holder.itemView.apply {
+
+            ivMessageImage.visibility = View.VISIBLE
+            tvDescription.visibility = View.VISIBLE
+            constraintExpand.visibility = View.GONE
+
             Glide.with(this).load(message.image).into(ivMessageImage)
-            tvID.text = message.id
+            //tvID.text = message.id
             tvTitle.text = message.title
             tvDescription.text = message.description
             //tvRead.text = message.unread
-            setOnClickListener {
+
+            Glide.with(this).load(message.image).into(imageExpand)
+            textViewExpand.text = message.description
+
+            ivSaved.setOnClickListener {
+                onSaveClick(message)
                 onItemClickListener?.let { it(message) }
+                Toast.makeText(context , "Message saved",Toast.LENGTH_LONG).show()
+                ivSaved.setImageDrawable(resources.getDrawable(R.drawable.ic_bookmark))
             }
+
+            ivShared.setOnClickListener {
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "share")
+                shareIntent.type = "text/plain"
+                context.startActivity(Intent.createChooser(shareIntent,"send to"))
+            }
+
+
+            if(message.unread)
+            {
+                constraintItem.setBackgroundColor(resources.getColor(R.color.colorMessageUnread))
+            }
+            else
+            {
+                constraintItem.setBackgroundColor(resources.getColor(R.color.white))
+            }
+
+            ivMore.setOnClickListener {
+                onItemClickListener?.let { it(message) }
+
+                ivMore.setRotationX(180f)
+
+                if(ivMessageImage.isVisible)
+                {
+                    ivMessageImage.visibility = View.GONE
+                    tvDescription.visibility = View.GONE
+                    constraintExpand.visibility = View.VISIBLE
+                }
+                else
+                {
+                    ivMessageImage.visibility = View.VISIBLE
+                    tvDescription.visibility = View.VISIBLE
+                    constraintExpand.visibility = View.GONE
+                }
+
+
+            }
+
+            constraintItem.setOnLongClickListener {
+                onItemLongClickListener?.let { it(message) }
+                //isLongTouch = true
+
+                true
+            }
+
+//            if(isLongTouch)
+//            {
+//                cbDelete.visibility = View.VISIBLE
+//            }
+
         }
     }
 
@@ -59,9 +129,14 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.MessageViewHolder>(){
     }
 
     private var onItemClickListener: ((Message) -> Unit)? = null
+    private var onItemLongClickListener: ((Message) -> Unit)? = null
 
     fun setOnItemClickListener(listener: (Message) -> Unit) {
         onItemClickListener = listener
+    }
+
+    fun setOnItemLongClickListener(listener: (Message) -> Unit) {
+        onItemLongClickListener = listener
     }
 
 }

@@ -8,4 +8,6 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="third_fragment">third</string>
     <string name="second_fragment">second</string>
+    <string name="remove">حذف</string>
+    <string name="cancle">انصراف</string>
 </resources>

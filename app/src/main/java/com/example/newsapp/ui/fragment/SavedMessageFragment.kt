@@ -50,7 +50,9 @@ class SavedMessageFragment : Fragment() {
 
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter(onSaveClick = {
+            //viewModel.saveMessage(it)
+        })
         rvSavedNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)

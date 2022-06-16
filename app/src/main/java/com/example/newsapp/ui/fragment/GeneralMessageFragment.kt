@@ -17,6 +17,7 @@ import com.example.newsapp.util.Resource
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_general_message.*
 import kotlinx.android.synthetic.main.item_message_preview.*
+import kotlinx.android.synthetic.main.item_message_preview.view.*
 
 /**
  * @author by Amin Majlesi
@@ -45,25 +46,22 @@ class GeneralMessageFragment : Fragment () {
         setupRecyclerView()
 
         ////////
-        newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("message", it)
-            }
+//        newsAdapter.setOnItemClickListener {
+//            val bundle = Bundle().apply {
+//                putSerializable("message", it)
+//            }
 
-            Snackbar.make(view, "News saved successfully : $it", Snackbar.LENGTH_LONG).show()
+            //Snackbar.make(view, "News saved successfully : $it", Snackbar.LENGTH_LONG).show()
 
+//        }
+
+        newsAdapter.setOnItemLongClickListener {
+            btnRemove.visibility = View.VISIBLE
+            btnCancel.visibility = View.VISIBLE
+            cbDelete.visibility = View.VISIBLE
+
+            true
         }
-//
-//        ivSaved.setOnClickListener {
-//            viewModel.saveMessage(message)
-//            Snackbar.make(view, "News saved successfully", Snackbar.LENGTH_SHORT).show()
-//        }
-
-//        newsAdapter.setOnItemClickListener{
-//            Snackbar.make(view, "News saved successfully : $it", Snackbar.LENGTH_SHORT).show()
-//        }
-
-
         ////////
 
 
@@ -99,7 +97,9 @@ class GeneralMessageFragment : Fragment () {
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter(onSaveClick = {
+            viewModel.saveMessage(it)
+        })
         rvBreakingNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
