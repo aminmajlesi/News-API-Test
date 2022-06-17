@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.newsapp.R
 import com.example.newsapp.models.Message
+import com.example.newsapp.models.NewsResponse
+import com.example.newsapp.util.MessageDiffUtil
 import kotlinx.android.synthetic.main.item_message_preview.view.*
 /**
  * @author by Amin Majlesi
@@ -21,6 +23,7 @@ class NewsAdapter(
 ) : RecyclerView.Adapter<NewsAdapter.MessageViewHolder>(){
 
     var isLongTouch : Boolean = false
+    //private var message = emptyList<Message>()
     inner class MessageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
     private val differCallback = object : DiffUtil.ItemCallback<Message>() {
@@ -68,6 +71,7 @@ class NewsAdapter(
                 onItemClickListener?.let { it(message) }
                 Toast.makeText(context , "Message saved",Toast.LENGTH_LONG).show()
                 ivSaved.setImageDrawable(resources.getDrawable(R.drawable.ic_bookmark))
+
             }
 
             ivShared.setOnClickListener {
@@ -81,11 +85,11 @@ class NewsAdapter(
 
             if(message.unread)
             {
-                constraintItem.setBackgroundColor(resources.getColor(R.color.colorMessageUnread))
+                constraintItem.setBackgroundColor(resources.getColor(R.color.white))
             }
             else
             {
-                constraintItem.setBackgroundColor(resources.getColor(R.color.white))
+                constraintItem.setBackgroundColor(resources.getColor(R.color.colorMessageUnread))
             }
 
             ivMore.setOnClickListener {
@@ -109,17 +113,19 @@ class NewsAdapter(
 
             }
 
-            constraintItem.setOnLongClickListener {
+            holder.itemView.setOnLongClickListener {
                 onItemLongClickListener?.let { it(message) }
-                //isLongTouch = true
+                isLongTouch = true
+                cbDelete.isChecked = true
 
                 true
             }
 
-//            if(isLongTouch)
-//            {
-//                cbDelete.visibility = View.VISIBLE
-//            }
+            if(isLongTouch)
+            {
+                cbDelete.visibility = View.VISIBLE
+
+            }
 
         }
     }
@@ -138,5 +144,21 @@ class NewsAdapter(
     fun setOnItemLongClickListener(listener: (Message) -> Unit) {
         onItemLongClickListener = listener
     }
+
+//    fun sendData(newsResponse: NewsResponse) {
+//        val recipesDiffUtil = MessageDiffUtil(message, newsResponse.messages)
+//        val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
+//        message = newsResponse.messages
+//        diffUtilResult.dispatchUpdatesTo(this)
+//    }
+//
+//    fun updateList(newsResponse: NewsResponse) {
+//
+//        val diffCallback = MessageDiffUtil(message, newsResponse.messages)
+//        val diffResult = DiffUtil.calculateDiff(diffCallback)
+//        diffResult.dispatchUpdatesTo(this)
+//
+//        message = newsResponse.messages
+//    }
 
 }

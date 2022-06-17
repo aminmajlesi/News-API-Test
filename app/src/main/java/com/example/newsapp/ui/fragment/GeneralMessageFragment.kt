@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.R
@@ -13,11 +14,13 @@ import com.example.newsapp.databinding.FragmentGeneralMessageBinding
 import com.example.newsapp.ui.NewsActivity
 import com.example.newsapp.ui.NewsViewModel
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.example.newsapp.util.Resource
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_general_message.*
 import kotlinx.android.synthetic.main.item_message_preview.*
 import kotlinx.android.synthetic.main.item_message_preview.view.*
+import kotlinx.coroutines.launch
 
 /**
  * @author by Amin Majlesi
@@ -43,8 +46,9 @@ class GeneralMessageFragment : Fragment () {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as NewsActivity).viewModel
-        setupRecyclerView()
 
+        setupRecyclerView()
+        //readDatabase()
         ////////
 //        newsAdapter.setOnItemClickListener {
 //            val bundle = Bundle().apply {
@@ -56,11 +60,22 @@ class GeneralMessageFragment : Fragment () {
 //        }
 
         newsAdapter.setOnItemLongClickListener {
+
             btnRemove.visibility = View.VISIBLE
             btnCancel.visibility = View.VISIBLE
             cbDelete.visibility = View.VISIBLE
 
             true
+        }
+
+        btnCancel.setOnClickListener {
+            cbDelete.visibility = View.GONE
+            btnRemove.visibility = View.GONE
+            btnCancel.visibility = View.GONE
+        }
+
+        btnRemove.setOnClickListener {
+
         }
         ////////
 
@@ -68,19 +83,22 @@ class GeneralMessageFragment : Fragment () {
         viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
             when(response) {
                 is Resource.Success -> {
-                    hideProgressBar()
+                    //hideProgressBar()
+                    hideShimmerEffect()
                     response.data?.let { newsResponse ->
                         newsAdapter.differ.submitList(newsResponse.messages)
                     }
                 }
                 is Resource.Error -> {
-                    hideProgressBar()
+                    //hideProgressBar()
+                    hideShimmerEffect()
                     response.message?.let { message ->
                         Log.e(TAG, "An error occured: $message")
                     }
                 }
                 is Resource.Loading -> {
-                    showProgressBar()
+                    //showProgressBar()
+                    showShimmerEffect()
                 }
             }
         })
@@ -88,12 +106,75 @@ class GeneralMessageFragment : Fragment () {
 
     }
 
-    private fun hideProgressBar() {
-        paginationProgressBar.visibility = View.INVISIBLE
+
+
+ /*   private fun readDatabase() {
+        lifecycleScope.launch {
+            viewModel.readMessage.observeOnce(viewLifecycleOwner) { database ->
+                if (database.isNotEmpty()) {
+                    Log.d("dataState", "readDatabase called  ")
+                    newsAdapter.sendData(database[0].foodRecipe)
+                    hideShimmerEffect()
+                } else {
+                    requestApiData()
+                }
+            }
+        }
     }
 
-    private fun showProgressBar() {
-        paginationProgressBar.visibility = View.VISIBLE
+    private fun requestApiData() {
+        Log.d("dataState", "requestApiData called  ")
+        viewModel.getBreakingNews()
+        viewModel.breakingNews.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideShimmerEffect()
+                    response.data?.let { newsResponse ->
+                        newsAdapter.differ.submitList(newsResponse.messages)
+                    }
+                }
+                is Resource.Error -> {
+                    hideShimmerEffect()
+                    loadDataFromCache()
+                    Toast.makeText(
+                        requireContext(),
+                        response.message.toString(),
+                        Toast.LENGTH_SHORT
+                    )
+                }
+                is Resource.Loading -> {
+                    showShimmerEffect()
+                }
+            }
+
+        }
+    }
+
+    private fun loadDataFromCache() {
+        lifecycleScope.launch {
+            viewModel.readMessage.observe(viewLifecycleOwner) { database ->
+                if (database.isNotEmpty()) {
+                    newsAdapter.sendData(database[0].......)
+                }
+            }
+        }
+    }
+*/
+
+//    private fun hideProgressBar() {
+//        paginationProgressBar.visibility = View.INVISIBLE
+//    }
+//
+//    private fun showProgressBar() {
+//        paginationProgressBar.visibility = View.VISIBLE
+//    }
+
+    private fun showShimmerEffect() {
+        binding.rvBreakingNews.showShimmer()
+    }
+
+    private fun hideShimmerEffect() {
+        binding.rvBreakingNews.hideShimmer()
     }
 
     private fun setupRecyclerView() {

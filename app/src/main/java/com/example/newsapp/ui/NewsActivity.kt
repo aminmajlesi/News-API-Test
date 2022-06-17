@@ -27,11 +27,12 @@ class NewsActivity : AppCompatActivity() {
         getSupportActionBar()?.setDisplayShowTitleEnabled(false)
 
         val newsRepository = NewsRepository(MessageDatabase(this))
-        val viewModelProviderFactory = NewsViewModelProviderFactory(newsRepository)
+        val viewModelProviderFactory = NewsViewModelProviderFactory(application,newsRepository)
         viewModel = ViewModelProvider(this, viewModelProviderFactory).get(NewsViewModel::class.java)
 
         setupTabLayout()
         setupViewPager()
+        binding.viewPager.setCurrentItem(1);
 
     }
 
@@ -67,6 +68,7 @@ class NewsActivity : AppCompatActivity() {
                 }
             })
         }
+
     }
 
 

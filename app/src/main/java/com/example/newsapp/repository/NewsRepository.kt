@@ -7,6 +7,9 @@ import com.example.newsapp.models.Message
 class NewsRepository(
     val db: MessageDatabase
 ) {
+
+    val local = db
+
     suspend fun getBreakingNews() = RetrofitInstance.api.getBreakingNews()
 
     suspend fun upsert(message: Message) = db.getMessageDao().upsert(message)
