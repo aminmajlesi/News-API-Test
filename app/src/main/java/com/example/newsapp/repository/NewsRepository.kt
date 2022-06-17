@@ -8,8 +8,6 @@ class NewsRepository(
     val db: MessageDatabase
 ) {
 
-    val local = db
-
     suspend fun getBreakingNews() = RetrofitInstance.api.getBreakingNews()
 
     suspend fun upsert(message: Message) = db.getMessageDao().upsert(message)
@@ -17,4 +15,10 @@ class NewsRepository(
     fun getSavedNews() = db.getMessageDao().getAllMessage()
 
     suspend fun deleteMessage(message: Message) = db.getMessageDao().deleteMessage(message)
+
+    fun readDatabase() = db.getMessageDao().readMessage()
+
+    suspend fun updateBookMarked(isBookmarked : Boolean ,  id : String) = db.getMessageDao().updateBookMarked(isBookmarked,id)
+
+    fun selectBookMarked() = db.getMessageDao().selectBookMarked()
 }

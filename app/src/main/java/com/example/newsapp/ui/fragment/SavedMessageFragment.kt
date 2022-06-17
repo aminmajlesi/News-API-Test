@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_general_message.*
 import kotlinx.android.synthetic.main.fragment_saved_message.*
 import kotlinx.android.synthetic.main.item_message_preview.*
+import kotlinx.android.synthetic.main.item_message_preview.view.*
 
 /**
  * @author by Amin Majlesi
@@ -74,8 +75,6 @@ class SavedMessageFragment : Fragment() {
             attachToRecyclerView(rvSavedNews)
         }
         ////////////////////////////////////////
-
-
 
         viewModel.getSavedNews().observe(viewLifecycleOwner, Observer { message ->
             newsAdapter.differ.submitList(message)

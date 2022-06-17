@@ -48,7 +48,7 @@ class GeneralMessageFragment : Fragment () {
         viewModel = (activity as NewsActivity).viewModel
 
         setupRecyclerView()
-        //readDatabase()
+        readDatabase()
         ////////
 //        newsAdapter.setOnItemClickListener {
 //            val bundle = Bundle().apply {
@@ -80,40 +80,41 @@ class GeneralMessageFragment : Fragment () {
         ////////
 
 
-        viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
-            when(response) {
-                is Resource.Success -> {
-                    //hideProgressBar()
-                    hideShimmerEffect()
-                    response.data?.let { newsResponse ->
-                        newsAdapter.differ.submitList(newsResponse.messages)
-                    }
-                }
-                is Resource.Error -> {
-                    //hideProgressBar()
-                    hideShimmerEffect()
-                    response.message?.let { message ->
-                        Log.e(TAG, "An error occured: $message")
-                    }
-                }
-                is Resource.Loading -> {
-                    //showProgressBar()
-                    showShimmerEffect()
-                }
-            }
-        })
+//        viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
+//            when(response) {
+//                is Resource.Success -> {
+//                    //hideProgressBar()
+//                    hideShimmerEffect()
+//                    response.data?.let { newsResponse ->
+//                        newsAdapter.differ.submitList(newsResponse.messages)
+//                    }
+//                }
+//                is Resource.Error -> {
+//                    //hideProgressBar()
+//                    hideShimmerEffect()
+//                    response.message?.let { message ->
+//                        Log.e(TAG, "An error occured: $message")
+//                    }
+//                }
+//                is Resource.Loading -> {
+//                    //showProgressBar()
+//                    showShimmerEffect()
+//                }
+//            }
+//        })
 
 
     }
 
 
 
- /*   private fun readDatabase() {
+    private fun readDatabase() {
         lifecycleScope.launch {
-            viewModel.readMessage.observeOnce(viewLifecycleOwner) { database ->
+            viewModel.readMessage.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
                     Log.d("dataState", "readDatabase called  ")
-                    newsAdapter.sendData(database[0].foodRecipe)
+                    //newsAdapter.sendData(it)
+                    newsAdapter.differ.submitList(database)
                     hideShimmerEffect()
                 } else {
                     requestApiData()
@@ -140,7 +141,7 @@ class GeneralMessageFragment : Fragment () {
                         requireContext(),
                         response.message.toString(),
                         Toast.LENGTH_SHORT
-                    )
+                    ).show()
                 }
                 is Resource.Loading -> {
                     showShimmerEffect()
@@ -154,12 +155,12 @@ class GeneralMessageFragment : Fragment () {
         lifecycleScope.launch {
             viewModel.readMessage.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-                    newsAdapter.sendData(database[0].......)
+                    //newsAdapter.sendData(database[0].......)
+                    newsAdapter.differ.submitList(database)
                 }
             }
         }
     }
-*/
 
 //    private fun hideProgressBar() {
 //        paginationProgressBar.visibility = View.INVISIBLE

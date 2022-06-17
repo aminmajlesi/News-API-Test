@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.example.newsapp.R
+import com.example.newsapp.adapters.NewsAdapter
 import com.example.newsapp.databinding.ActivityNewsBinding
 import com.example.newsapp.db.MessageDatabase
 import com.example.newsapp.repository.NewsRepository
@@ -16,6 +17,7 @@ class NewsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewsBinding
     lateinit var viewModel: NewsViewModel
+    lateinit var newsAdapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +32,15 @@ class NewsActivity : AppCompatActivity() {
         val viewModelProviderFactory = NewsViewModelProviderFactory(application,newsRepository)
         viewModel = ViewModelProvider(this, viewModelProviderFactory).get(NewsViewModel::class.java)
 
+        newsAdapter = NewsAdapter(onSaveClick = {
+            //viewModel.saveMessage(it)
+        })
+
         setupTabLayout()
         setupViewPager()
         binding.viewPager.setCurrentItem(1);
 
     }
-
-
 
     private fun setupViewPager() {
         binding.viewPager.apply {
@@ -45,14 +49,13 @@ class NewsActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun setupTabLayout() {
         binding.tabLayout.apply {
             addTab(this.newTab().setText(resources.getString(R.string.txt_saved)))
-            addTab(this.newTab().setText(resources.getString(R.string.txt_general)))
-
-            // tabGravity = TabLayout.GRAVITY_FILL
+            //addTab(this.newTab().setText(resources.getString(R.string.txt_general)))
+            ///TODO : this should get number of item
+            addTab(this.newTab().setText(String.format(resources.getString(R.string.txt_general),
+                newsAdapter.differ.currentList.size)))
 
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {

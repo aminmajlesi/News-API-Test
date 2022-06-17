@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.newsapp.models.Message
 import com.example.newsapp.models.NewsResponse
@@ -13,7 +12,6 @@ import com.example.newsapp.util.Resource
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
-import java.lang.Exception
 
 class NewsViewModel(
     app: Application,
@@ -22,7 +20,7 @@ class NewsViewModel(
 
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
 
-    //val readMessage: LiveData<List<Message>> = newsRepository.local.readDatabase().asLiveData()
+    val readMessage: LiveData<List<Message>> = newsRepository.readDatabase().asLiveData()
 
     init {
         getBreakingNews()
@@ -31,6 +29,12 @@ class NewsViewModel(
     fun getBreakingNews() = viewModelScope.launch {
         safeBreakingNewsCall()
     }
+
+//    private fun offlineCacheRecipe(newsResponse: NewsResponse) {
+//        //val message = Message(newsResponse.messages)
+//        saveMessage(message)
+//    }
+
 
     private fun handleBreakingNewsResponse(response: Response<NewsResponse>) : Resource<NewsResponse> {
         if(response.isSuccessful) {
@@ -46,6 +50,12 @@ class NewsViewModel(
         newsRepository.upsert(message)
     }
 
+    fun updateBookMarked(isBookmarked : Boolean ,  id : String) = viewModelScope.launch {
+        newsRepository.updateBookMarked(isBookmarked , id)
+    }
+
+    fun selectBookMarked() = newsRepository.selectBookMarked()
+
     fun getSavedNews() = newsRepository.getSavedNews()
 
     fun deleteMessage(message: Message) = viewModelScope.launch {
@@ -59,6 +69,10 @@ class NewsViewModel(
             if(hasInternetConnection()) {
                 val response = newsRepository.getBreakingNews()
                 breakingNews.postValue(handleBreakingNewsResponse(response))
+
+
+                //offlineCacheRecipe(breakingNews.value!!.data)
+
             } else {
                 breakingNews.postValue(Resource.Error("No internet connection"))
             }
@@ -69,11 +83,6 @@ class NewsViewModel(
             }
         }
     }
-
-//    private fun offlineCacheBreakingNews(message: Message) {
-//        val messageEntity = RecipesEntity(message)
-//        insertRecipe(messageEntity)
-//    }
 
     private fun hasInternetConnection(): Boolean {
         val connectivityManager = getApplication<Application>().getSystemService(

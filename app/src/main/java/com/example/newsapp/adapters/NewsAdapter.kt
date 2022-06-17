@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.newsapp.R
 import com.example.newsapp.models.Message
 import com.example.newsapp.models.NewsResponse
+import com.example.newsapp.ui.NewsViewModel
 import com.example.newsapp.util.MessageDiffUtil
 import kotlinx.android.synthetic.main.item_message_preview.view.*
 /**
@@ -23,8 +24,9 @@ class NewsAdapter(
 ) : RecyclerView.Adapter<NewsAdapter.MessageViewHolder>(){
 
     var isLongTouch : Boolean = false
-    //private var message = emptyList<Message>()
+    private var message = emptyList<Message>()
     inner class MessageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+    lateinit var viewModel: NewsViewModel
 
     private val differCallback = object : DiffUtil.ItemCallback<Message>() {
         override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean {
@@ -71,6 +73,8 @@ class NewsAdapter(
                 onItemClickListener?.let { it(message) }
                 Toast.makeText(context , "Message saved",Toast.LENGTH_LONG).show()
                 ivSaved.setImageDrawable(resources.getDrawable(R.drawable.ic_bookmark))
+
+               // viewModel.updateBookMarked( true,message.id)
 
             }
 
@@ -145,20 +149,12 @@ class NewsAdapter(
         onItemLongClickListener = listener
     }
 
-//    fun sendData(newsResponse: NewsResponse) {
-//        val recipesDiffUtil = MessageDiffUtil(message, newsResponse.messages)
-//        val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
-//        message = newsResponse.messages
-//        diffUtilResult.dispatchUpdatesTo(this)
-//    }
-//
-//    fun updateList(newsResponse: NewsResponse) {
-//
-//        val diffCallback = MessageDiffUtil(message, newsResponse.messages)
-//        val diffResult = DiffUtil.calculateDiff(diffCallback)
-//        diffResult.dispatchUpdatesTo(this)
-//
-//        message = newsResponse.messages
-//    }
+    fun sendData(newsResponse: NewsResponse) {
+        val recipesDiffUtil = MessageDiffUtil(message, newsResponse.messages)
+        val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
+        message = newsResponse.messages
+        diffUtilResult.dispatchUpdatesTo(this)
+    }
+
 
 }

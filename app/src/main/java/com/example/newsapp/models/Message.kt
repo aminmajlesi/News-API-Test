@@ -14,5 +14,6 @@ data class Message(
     val id: String,
     val image: String,
     val title: String,
-    val unread: Boolean
+    val unread: Boolean,
+    val isBookmarked: Boolean
 ) : Serializable
