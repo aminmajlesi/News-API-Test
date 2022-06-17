@@ -12,7 +12,7 @@ data class Message(
     var idNum: Int? = null,
     val description: String,
     val id: String,
-    val image: String,
+    val image: String?,
     val title: String,
     val unread: Boolean,
     val isBookmarked: Boolean

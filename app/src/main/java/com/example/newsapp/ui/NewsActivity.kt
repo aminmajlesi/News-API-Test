@@ -52,10 +52,7 @@ class NewsActivity : AppCompatActivity() {
     private fun setupTabLayout() {
         binding.tabLayout.apply {
             addTab(this.newTab().setText(resources.getString(R.string.txt_saved)))
-            //addTab(this.newTab().setText(resources.getString(R.string.txt_general)))
-            ///TODO : this should get number of item
-            addTab(this.newTab().setText(String.format(resources.getString(R.string.txt_general),
-                newsAdapter.differ.currentList.size)))
+            addTab(this.newTab().setText(resources.getString(R.string.txt_general)))
 
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {

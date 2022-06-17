@@ -113,7 +113,6 @@ class GeneralMessageFragment : Fragment () {
             viewModel.readMessage.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
                     Log.d("dataState", "readDatabase called  ")
-                    //newsAdapter.sendData(it)
                     newsAdapter.differ.submitList(database)
                     hideShimmerEffect()
                 } else {
@@ -125,7 +124,6 @@ class GeneralMessageFragment : Fragment () {
 
     private fun requestApiData() {
         Log.d("dataState", "requestApiData called  ")
-        viewModel.getBreakingNews()
         viewModel.breakingNews.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
@@ -155,20 +153,11 @@ class GeneralMessageFragment : Fragment () {
         lifecycleScope.launch {
             viewModel.readMessage.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-                    //newsAdapter.sendData(database[0].......)
                     newsAdapter.differ.submitList(database)
                 }
             }
         }
     }
-
-//    private fun hideProgressBar() {
-//        paginationProgressBar.visibility = View.INVISIBLE
-//    }
-//
-//    private fun showProgressBar() {
-//        paginationProgressBar.visibility = View.VISIBLE
-//    }
 
     private fun showShimmerEffect() {
         binding.rvBreakingNews.showShimmer()

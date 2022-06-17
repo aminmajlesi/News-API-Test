@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">NewsApp</string>
     <string name="txt_activity_message">پیام های من</string>
-    <string name="txt_general"> عمومی %s</string>
+<!--    <string name="txt_general"> عمومی %s</string>-->
+    <string name="txt_general"> عمومی</string>
     <string name="txt_saved">ذخیره شده</string>
     <string name="title_activity_news">NewsActivity</string>
     <string name="tab_text_1">Tab 1</string>
