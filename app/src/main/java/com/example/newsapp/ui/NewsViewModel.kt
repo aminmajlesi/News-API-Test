@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.newsapp.models.Message
 import com.example.newsapp.models.NewsResponse
@@ -20,6 +21,8 @@ class NewsViewModel(
 
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
 
+    var breakingNewsList: MutableLiveData<List<Message>> = MutableLiveData()
+
     val readMessage: LiveData<List<Message>> = newsRepository.readDatabase().asLiveData()
 
     init {
@@ -27,13 +30,18 @@ class NewsViewModel(
     }
 
     fun getBreakingNews() = viewModelScope.launch {
-        safeBreakingNewsCall()
+        try {
+//            safeBreakingNewsCall()
+            val response = newsRepository.getBreakingNews()
+            if (response.isSuccessful) {
+                Log.d("dataState", "getBreakingNews called  ")
+                breakingNewsList.value = response.body()?.messages
+            } else {
+                // handle error
+            }
+        } catch (e: Exception) {
+        }
     }
-
-//    private fun offlineCacheRecipe(newsResponse: NewsResponse) {
-//        //val message = Message(newsResponse.messages)
-//        saveMessage(message)
-//    }
 
 
     private fun handleBreakingNewsResponse(response: Response<NewsResponse>) : Resource<NewsResponse> {
@@ -70,9 +78,6 @@ class NewsViewModel(
                 val response = newsRepository.getBreakingNews()
                 breakingNews.postValue(handleBreakingNewsResponse(response))
 
-
-                //offlineCacheRecipe(breakingNews.value!!.data)
-
             } else {
                 breakingNews.postValue(Resource.Error("No internet connection"))
             }
@@ -101,7 +106,13 @@ class NewsViewModel(
 
     }
 
-
+    fun saveMessagesList(messagesList: List<Message>?) {
+        if (messagesList != null) {
+            for (message in messagesList) {
+                saveMessage(message)
+            }
+        }
+    }
 
 
 }

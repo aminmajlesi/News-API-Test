@@ -24,17 +24,18 @@ class NewsAdapter(
 ) : RecyclerView.Adapter<NewsAdapter.MessageViewHolder>(){
 
     var isLongTouch : Boolean = false
-    private var message = emptyList<Message>()
     inner class MessageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     lateinit var viewModel: NewsViewModel
 
     private val differCallback = object : DiffUtil.ItemCallback<Message>() {
         override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean {
-            return oldItem.id == newItem.id
+            //return oldItem.id == newItem.id
+            return oldItem.description == newItem.description
         }
 
         override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean {
-            return oldItem == newItem
+            //return oldItem == newItem
+            return oldItem.description == newItem.description
         }
     }
 
@@ -74,7 +75,7 @@ class NewsAdapter(
                 Toast.makeText(context , "Message saved",Toast.LENGTH_LONG).show()
                 ivSaved.setImageDrawable(resources.getDrawable(R.drawable.ic_bookmark))
 
-               // viewModel.updateBookMarked( true,message.id)
+                //viewModel.updateBookMarked( true,message.id)
 
             }
 
@@ -147,13 +148,6 @@ class NewsAdapter(
 
     fun setOnItemLongClickListener(listener: (Message) -> Unit) {
         onItemLongClickListener = listener
-    }
-
-    fun sendData(newsResponse: NewsResponse) {
-        val recipesDiffUtil = MessageDiffUtil(message, newsResponse.messages)
-        val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
-        message = newsResponse.messages
-        diffUtilResult.dispatchUpdatesTo(this)
     }
 
 

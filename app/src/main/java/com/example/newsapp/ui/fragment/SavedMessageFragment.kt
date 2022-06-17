@@ -76,7 +76,11 @@ class SavedMessageFragment : Fragment() {
         }
         ////////////////////////////////////////
 
-        viewModel.getSavedNews().observe(viewLifecycleOwner, Observer { message ->
+//        viewModel.getSavedNews().observe(viewLifecycleOwner, Observer { message ->
+//            newsAdapter.differ.submitList(message)
+//        })
+
+        viewModel.selectBookMarked().observe(viewLifecycleOwner, Observer { message ->
             newsAdapter.differ.submitList(message)
         })
 

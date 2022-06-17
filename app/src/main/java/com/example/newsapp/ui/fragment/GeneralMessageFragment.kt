@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.R
 import com.example.newsapp.adapters.NewsAdapter
@@ -48,15 +50,10 @@ class GeneralMessageFragment : Fragment () {
         viewModel = (activity as NewsActivity).viewModel
 
         setupRecyclerView()
-        readDatabase()
+        initObservers()
         ////////
 //        newsAdapter.setOnItemClickListener {
-//            val bundle = Bundle().apply {
-//                putSerializable("message", it)
-//            }
-
             //Snackbar.make(view, "News saved successfully : $it", Snackbar.LENGTH_LONG).show()
-
 //        }
 
         newsAdapter.setOnItemLongClickListener {
@@ -75,51 +72,48 @@ class GeneralMessageFragment : Fragment () {
         }
 
         btnRemove.setOnClickListener {
+//            val position = viewHolder.adapterPosition
+//            val article = newsAdapter.differ.currentList[position]
+//            viewModel.deleteMessage(article)
+//            Snackbar.make(view, "Successfully deleted article", Snackbar.LENGTH_LONG).apply {
+//                setAction("Undo") {
+//                    viewModel.saveMessage(article)
+//                }
+//                show()
+//            }
+        }
+
+        ivSaved.setOnClickListener {
+//            val position = viewHolder.adapterPosition
+//            val article = newsAdapter.differ.currentList[position]
+//            viewModel.updateBookMarked( true, article)
 
         }
-        ////////
-
-
-//        viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
-//            when(response) {
-//                is Resource.Success -> {
-//                    //hideProgressBar()
-//                    hideShimmerEffect()
-//                    response.data?.let { newsResponse ->
-//                        newsAdapter.differ.submitList(newsResponse.messages)
-//                    }
-//                }
-//                is Resource.Error -> {
-//                    //hideProgressBar()
-//                    hideShimmerEffect()
-//                    response.message?.let { message ->
-//                        Log.e(TAG, "An error occured: $message")
-//                    }
-//                }
-//                is Resource.Loading -> {
-//                    //showProgressBar()
-//                    showShimmerEffect()
-//                }
-//            }
-//        })
 
 
     }
 
+    private fun initObservers() {
 
-
-    private fun readDatabase() {
-        lifecycleScope.launch {
-            viewModel.readMessage.observe(viewLifecycleOwner) { database ->
-                if (database.isNotEmpty()) {
-                    Log.d("dataState", "readDatabase called  ")
-                    newsAdapter.differ.submitList(database)
-                    hideShimmerEffect()
-                } else {
-                    requestApiData()
-                }
-            }
+        viewModel.breakingNewsList.observe(viewLifecycleOwner) { messagesList ->
+            newsAdapter.differ.submitList(messagesList)
+            viewModel.saveMessagesList(messagesList)
         }
+
+        viewModel.readMessage.observeOnce(viewLifecycleOwner) { database ->
+            if (database.isNotEmpty()) {
+                Log.d("dataState", "readDatabase called  ")
+                newsAdapter.differ.submitList(database)
+                hideShimmerEffect()
+            }
+            getBreakingNews()
+        }
+
+    }
+
+
+    private fun getBreakingNews(){
+        viewModel.getBreakingNews()
     }
 
     private fun requestApiData() {
@@ -175,6 +169,15 @@ class GeneralMessageFragment : Fragment () {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
         }
+    }
+
+    fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>){
+        observe(lifecycleOwner,object :Observer<T> {
+            override fun onChanged(t: T) {
+                removeObserver(this)
+                observer.onChanged(t)
+            }
+        })
     }
 
 }
