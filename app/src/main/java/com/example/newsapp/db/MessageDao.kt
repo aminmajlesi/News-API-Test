@@ -23,7 +23,7 @@ interface MessageDao {
     @Query("Update message_table SET isBookmarked = :isBookmarked where id = :id")
     suspend fun updateBookMarked( isBookmarked : Boolean ,  id : String)
 
-    @Query("SELECT * FROM message_table where isBookmarked = 'true'")
+    @Query("SELECT * FROM message_table where isBookmarked = 1")
     fun selectBookMarked(): LiveData<List<Message>>
 
 }

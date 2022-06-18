@@ -83,12 +83,12 @@ class GeneralMessageFragment : Fragment () {
 //            }
         }
 
-        ivSaved.setOnClickListener {
+//        ivSaved.setOnClickListener {
 //            val position = viewHolder.adapterPosition
 //            val article = newsAdapter.differ.currentList[position]
 //            viewModel.updateBookMarked( true, article)
 
-        }
+ //       }
 
 
     }
@@ -163,7 +163,7 @@ class GeneralMessageFragment : Fragment () {
 
     private fun setupRecyclerView() {
         newsAdapter = NewsAdapter(onSaveClick = {
-            viewModel.saveMessage(it)
+            viewModel.updateBookMarked(true , it.id)
         })
         rvBreakingNews.apply {
             adapter = newsAdapter

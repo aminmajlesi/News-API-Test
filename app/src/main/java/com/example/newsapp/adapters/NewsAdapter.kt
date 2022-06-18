@@ -75,8 +75,6 @@ class NewsAdapter(
                 Toast.makeText(context , "Message saved",Toast.LENGTH_LONG).show()
                 ivSaved.setImageDrawable(resources.getDrawable(R.drawable.ic_bookmark))
 
-                //viewModel.updateBookMarked( true,message.id)
-
             }
 
             ivShared.setOnClickListener {
